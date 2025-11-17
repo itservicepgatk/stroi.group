@@ -76,7 +76,7 @@ section:nth-child(even) {
 }
 
 .logo {
-    font-size: 1.8rem;
+    font-size: 1.9rem;
     font-weight: 700;
     color: var(--primary-color);
     z-index: 1001;
@@ -86,8 +86,13 @@ section:nth-child(even) {
 }
 
 .logo img {
-    height: 45px;
+    height: 50px;
     width: auto;
+    flex-shrink: 0;
+}
+
+.logo-text {
+    line-height: 1.2;
 }
 
 .logo span {
@@ -120,6 +125,7 @@ section:nth-child(even) {
     justify-content: center;
     align-items: center;
     text-align: center;
+    padding: 2rem;
 }
 
 .hero-content h1 {
@@ -269,6 +275,7 @@ section:nth-child(even) {
         align-items: center;
         transition: right 0.4s ease-in-out;
         z-index: 1000;
+        padding-top: 60px;
     }
 
     .navbar.active {
@@ -295,6 +302,7 @@ section:nth-child(even) {
 
     .burger-menu {
         display: block;
+        flex-shrink: 0;
     }
 
     .burger-menu.active .burger-menu__line:nth-child(1) {
@@ -312,17 +320,21 @@ section:nth-child(even) {
     .container {
         padding: 0 1.5rem;
     }
+
     .logo {
-        font-size: 1.2rem;
         gap: 10px;
     }
     .logo img {
-        height: 35px;
+        height: 45px;
     }
+     .logo-text {
+        font-size: 1.2rem;
+    }
+
     .hero {
         height: auto;
-        min-height: 50vh;
-        padding: 3rem 0;
+        min-height: 60vh;
+        padding: 3rem 1.5rem;
     }
     .hero-content h1 {
         font-size: 2.2rem;
@@ -331,9 +343,11 @@ section:nth-child(even) {
     .hero-content p {
         font-size: 1.1rem;
     }
+
     h2 {
         font-size: 2rem;
     }
+
     .grid-3,
     .about-home-grid,
     .contact-grid {
@@ -346,6 +360,7 @@ section:nth-child(even) {
     .about-home-grid .about-image {
         grid-row: 1;
     }
+
     .footer .container {
         flex-direction: column;
         gap: 0.5rem;
@@ -358,9 +373,20 @@ section:nth-child(even) {
     }
 }
 
-@media (max-width: 380px) {
+@media (max-width: 420px) {
     .logo {
-        font-size: 1rem;
         gap: 8px;
+    }
+    .logo-text {
+       font-size: 1.0rem;
+    }
+    .logo img {
+        height: 40px;
+    }
+    .hero-content h1 {
+        font-size: 1.8rem;
+    }
+    .hero-content p {
+        font-size: 1rem;
     }
 }
