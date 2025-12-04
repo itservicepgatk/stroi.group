@@ -18,30 +18,31 @@
 <body>
 
     <header class="header">
-        <div class="container">
-            <a href="index.html" class="logo">
-                <img src="images/logo.png" alt="Логотип С ВАМИ СТРОЙГРУПП">
-                <div class="logo-text">
-                    <span>С ВАМИ</span> СТРОЙГРУПП
-                </div>
-            </a>
-            <nav class="navbar">
-                <ul>
-                    <li><a href="index.html" class="active">Главная</a></li>
-                    <li><a href="services/index.html">Услуги</a></li>
-                    <li><a href="projects.html">Портфолио</a></li>
-                    <li><a href="about.html">О компании</a></li>
-                    <li><a href="licenses.html">Сертификаты</a></li>
-                    <li><a href="contacts.html">Контакты</a></li>
-                </ul>
-            </nav>
-            <button class="burger-menu" id="burger-menu">
-                <span class="burger-menu__line"></span>
-                <span class="burger-menu__line"></span>
-                <span class="burger-menu__line"></span>
-            </button>
-        </div>
-    </header>
+    <div class="container">
+        <a href="index.html" class="logo">
+            <img src="images/logo.png" alt="Логотип С ВАМИ СТРОЙГРУПП">
+            <div class="logo-text">
+                <span>С ВАМИ</span> СТРОЙГРУПП
+            </div>
+        </a>
+        <nav class="navbar">
+            <ul>
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="services/index.html">Услуги</a></li>
+                <li><a href="projects.html">Портфолио</a></li>
+                <li><a href="about.html">О компании</a></li>
+                <li><a href="licenses.html">Сертификаты</a></li>
+                <li><a href="contacts.html">Контакты</a></li>
+            </ul>
+        </nav>
+        <button class="burger-menu" id="burger-menu">
+            <span class="burger-menu__line"></span>
+            <span class="burger-menu__line"></span>
+            <span class="burger-menu__line"></span>
+        </button>
+    </div>
+</header>
+
 
     <main>
         <section class="hero">
@@ -54,7 +55,7 @@
 
         <section id="services">
             <div class="container">
-                <h2 data-aos="fade-up">Наши ключевые услуги</h2>
+                <h2 data-aos="fade-up">Наши услуги</h2>
                 <div class="grid-3">
                     <div class="service-card" data-aos="fade-up" data-aos-delay="100">
                         <h3>Генеральный подряд</h3>
@@ -70,6 +71,12 @@
                         <h3>Фасадные и кровельные работы</h3>
                         <p>Устройство современных систем утепления, облицовки фасадов и монтаж надежных кровель.</p>
                         <a href="services/facade-works.html">Подробнее &rarr;</a>
+                    </div>
+                    <!-- Новая карточка инженерных услуг -->
+                    <div class="service-card" data-aos="fade-up" data-aos-delay="400">
+                        <h3>Инженерные услуги</h3>
+                        <p>Технадзор, помощь в выборе подрядчиков и проектных решений.</p>
+                        <a href="services/engineering-services.html">Подробнее &rarr;</a>
                     </div>
                 </div>
             </div>
@@ -91,11 +98,12 @@
     </main>
 
     <footer class="footer">
-        <div class="container">
-            <p>&copy; 2025 ООО "С ВАМИ СТРОЙГРУПП". Все права защищены.</p>
-            <p><a href="contacts.html">Связаться с нами</a></p>
-        </div>
-    </footer>
+    <div class="container">
+        <p>&copy; 2025 ООО "С ВАМИ СТРОЙГРУПП". Все права защищены.</p>
+        <p><a href="contacts.html">Связаться с нами</a></p>
+    </div>
+</footer>
+
     
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/simplelightbox/2.14.2/simple-lightbox.min.js" integrity="sha512/4kQE5RJQYHRhUiK+CZS8UhaJTnLmQkDUf810hiP2X8LdjthA/rm0VqqWJcyelIx+NDyNHFmtqvuIgOFQNl34WA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
