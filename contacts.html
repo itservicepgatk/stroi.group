@@ -11,40 +11,26 @@
     <link rel="manifest" href="site.webmanifest">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplelightbox/2.14.2/simple-lightbox.min.css"
-        integrity="sha512-FaAQujRxLMvw+BkmGN3w7u9EdQQr1t0vQoY8KDh09+6SFaWSTe+KrT8oCwg25X91hytm5c5BTmiSGQejkraaZg=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplelightbox/2.14.2/simple-lightbox.min.css" />
     <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
 
-    <header class="header">
-    <div class="container">
-        <a href="index.html" class="logo">
-            <img src="images/logo.png" alt="Логотип С ВАМИ СТРОЙГРУПП">
-            <div class="logo-text">
-                <span>С ВАМИ</span> СТРОЙГРУПП
+    <div id="header-placeholder"></div>
+    <noscript>
+        <header class="header">
+            <div class="container">
+                <a href="index.html" class="logo">СТРОЙГРУПП</a>
+                <nav class="navbar">
+                    <ul>
+                        <li><a href="index.html">Главная</a></li>
+                        <li><a href="contacts.html">Контакты</a></li>
+                    </ul>
+                </nav>
             </div>
-        </a>
-        <nav class="navbar">
-            <ul>
-                <li><a href="index.html">Главная</a></li>
-                <li><a href="services/index.html">Услуги</a></li>
-                <li><a href="projects.html">Портфолио</a></li>
-                <li><a href="about.html">О компании</a></li>
-                <li><a href="licenses.html">Сертификаты</a></li>
-                <li><a href="contacts.html">Контакты</a></li>
-            </ul>
-        </nav>
-        <button class="burger-menu" id="burger-menu">
-            <span class="burger-menu__line"></span>
-            <span class="burger-menu__line"></span>
-            <span class="burger-menu__line"></span>
-        </button>
-    </div>
-</header>
-
+        </header>
+    </noscript>
 
     <main>
         <section id="contacts-page">
@@ -52,8 +38,7 @@
                 <h2 data-aos="fade-up">Свяжитесь с нами</h2>
                 <p style="text-align: center; max-width: 800px; margin: 0 auto 3rem auto;" data-aos="fade-up"
                     data-aos-delay="100">
-                    Мы всегда готовы ответить на ваши вопросы, рассчитать стоимость проекта или обсудить детали
-                    сотрудничества. Выберите удобный для вас способ связи.
+                    Мы всегда готовы ответить на ваши вопросы.
                 </p>
                 <div class="contact-grid">
                     <div class="contact-info" data-aos="fade-right">
@@ -71,19 +56,24 @@
                                 Мышь, ул. Барановичская, дом 28</li>
                         </ul>
                     </div>
+                    
                     <div class="contact-form" data-aos="fade-left">
                         <h3>Отправить сообщение</h3>
-                        <form>
+                        <form action="https://formsubmit.co/constructiongroup86@mail.ru" method="POST">
+                            
+                            <input type="hidden" name="_captcha" value="false">
+                            <input type="hidden" name="_subject" value="Новая заявка с сайта С ВАМИ СТРОЙГРУПП">
+
                             <div style="margin-bottom: 1rem;">
-                                <input type="text" placeholder="Ваше имя" required
+                                <input type="text" name="name" placeholder="Ваше имя" required
                                     style="width: 100%; padding: 0.5rem;">
                             </div>
                             <div style="margin-bottom: 1rem;">
-                                <input type="email" placeholder="Ваш Email" required
+                                <input type="email" name="email" placeholder="Ваш Email" required
                                     style="width: 100%; padding: 0.5rem;">
                             </div>
                             <div style="margin-bottom: 1rem;">
-                                <textarea placeholder="Ваше сообщение" rows="5" required
+                                <textarea name="message" placeholder="Ваше сообщение" rows="5" required
                                     style="width: 100%; padding: 0.5rem;"></textarea>
                             </div>
                             <button type="submit" class="btn">Отправить</button>
@@ -94,18 +84,10 @@
         </section>
     </main>
 
-    <footer class="footer">
-    <div class="container">
-        <p>&copy; 2025 ООО "С ВАМИ СТРОЙГРУПП". Все права защищены.</p>
-        <p><a href="contacts.html">Связаться с нами</a></p>
-    </div>
-</footer>
+    <div id="footer-placeholder"></div>
 
-    
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/simplelightbox/2.14.2/simple-lightbox.min.js"
-        integrity="sha512/4kQE5RJQYHRhUiK+CZS8UhaJTnLmQkDUf810hiP2X8LdjthA/rm0VqqWJcyelIx+NDyNHFmtqvuIgOFQNl34WA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/simplelightbox/2.14.2/simple-lightbox.min.js"></script>
     <script src="js/script.js"></script>
 </body>
 
