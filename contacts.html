@@ -11,84 +11,419 @@
     <link rel="manifest" href="site.webmanifest">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplelightbox/2.14.2/simple-lightbox.min.css" />
     <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        #contacts-page { padding: 4rem 0 5rem; }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.35fr;
+            gap: 3rem;
+            align-items: start;
+            margin-top: 2.5rem;
+        }
+
+        /* ── Левая колонка ── */
+        .contact-info h3 {
+            font-size: 1.25rem;
+            margin-bottom: 1.8rem;
+            position: relative;
+            padding-bottom: .7rem;
+        }
+        .contact-info h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 40px; height: 3px;
+            background: var(--primary-color);
+            border-radius: 2px;
+        }
+        .contact-info ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 1.1rem; }
+        .contact-info li { display: flex; align-items: flex-start; gap: .9rem; }
+
+        .ci-icon {
+            flex-shrink: 0;
+            width: 42px; height: 42px;
+            border-radius: 10px;
+            background: #fff0f2;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.15rem;
+        }
+        .ci-text strong {
+            display: block;
+            font-size: .72rem;
+            text-transform: uppercase;
+            letter-spacing: .07em;
+            color: #aaa;
+            margin-bottom: .18rem;
+        }
+        .ci-text a { color: var(--primary-color); font-weight: 600; text-decoration: none; }
+        .ci-text a:hover { text-decoration: underline; }
+        .ci-text span { font-size: .95rem; color: var(--text-color); line-height: 1.5; }
+
+        /* ── Карточка формы ── */
+        .contact-form-card {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 8px 40px rgba(0,0,0,.09);
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .contact-form-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), #ff6b6b);
+        }
+        .contact-form-card h3 { font-size: 1.25rem; margin: 0 0 1.8rem; }
+
+        /* ── Поля формы ── */
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .form-group { margin-bottom: 1.1rem; }
+        .form-group label {
+            display: block;
+            font-size: .72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .07em;
+            color: #aaa;
+            margin-bottom: .4rem;
+        }
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: .78rem 1rem;
+            border: 2px solid #ebebeb;
+            border-radius: 8px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: .95rem;
+            color: var(--text-color);
+            background: #fafafa;
+            transition: border-color .25s, box-shadow .25s, background .25s;
+            box-sizing: border-box;
+            outline: none;
+        }
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary-color);
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(200,16,46,.08);
+        }
+        .form-group textarea { resize: vertical; min-height: 130px; }
+
+        /* ── Кнопка ── */
+        .btn-submit {
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary-color);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: .7rem;
+            transition: background .25s, transform .15s, box-shadow .25s;
+            margin-top: .4rem;
+        }
+        .btn-submit:hover:not(:disabled) {
+            background: #a00018;
+            box-shadow: 0 6px 20px rgba(200,16,46,.35);
+            transform: translateY(-1px);
+        }
+        .btn-submit:active:not(:disabled) { transform: translateY(0); }
+        .btn-submit:disabled { opacity: .75; cursor: not-allowed; }
+
+        .btn-spinner {
+            width: 18px; height: 18px;
+            border: 2.5px solid rgba(255,255,255,.35);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin .7s linear infinite;
+            display: none;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ── Toast-уведомление ── */
+        #toast {
+            position: fixed;
+            bottom: 28px;
+            left: 50%;
+            transform: translateX(-50%) translateY(130px);
+            opacity: 0;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 20px 14px 18px;
+            border-radius: 14px;
+            background: #fff;
+            box-shadow: 0 10px 40px rgba(0,0,0,.16);
+            z-index: 9999;
+            min-width: 320px;
+            max-width: 88vw;
+            transition: transform .45s cubic-bezier(.34,1.56,.64,1), opacity .4s ease;
+        }
+        #toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+        #toast.success { border-left: 5px solid #22c55e; }
+        #toast.error   { border-left: 5px solid var(--primary-color); }
+
+        .toast-icon {
+            font-size: 1.9rem;
+            flex-shrink: 0;
+            animation: pop .4s cubic-bezier(.34,1.56,.64,1) .05s both;
+        }
+        @keyframes pop { from { transform: scale(0); } to { transform: scale(1); } }
+
+        .toast-body { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
+        .toast-title { font-size: .98rem; font-weight: 700; color: #111; }
+        .toast-sub   { font-size: .8rem; font-weight: 500; color: #777; line-height: 1.45; }
+
+        .toast-close {
+            flex-shrink: 0;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            color: #bbb;
+            padding: 0;
+            margin-left: 6px;
+            transition: color .2s;
+            line-height: 1;
+        }
+        .toast-close:hover { color: #444; }
+
+        /* ── Адаптив ── */
+        @media (max-width: 900px) { .contact-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 540px) {
+            .form-row { grid-template-columns: 1fr; }
+            .contact-form-card { padding: 1.8rem 1.3rem; }
+        }
+    </style>
 </head>
 
 <body>
 
-    <div id="header-placeholder"></div>
-    <noscript>
-        <header class="header">
-            <div class="container">
-                <a href="index.html" class="logo">СТРОЙГРУПП</a>
-                <nav class="navbar">
-                    <ul>
-                        <li><a href="index.html">Главная</a></li>
-                        <li><a href="contacts.html">Контакты</a></li>
-                    </ul>
-                </nav>
-            </div>
-        </header>
-    </noscript>
+    <header class="header">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="images/logo.png" alt="Логотип С ВАМИ СТРОЙГРУПП">
+                <div class="logo-text"><span>С ВАМИ</span> СТРОЙГРУПП</div>
+            </a>
+            <nav class="navbar">
+                <ul>
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="services/index.html">Услуги</a></li>
+                    <li><a href="projects.html">Портфолио</a></li>
+                    <li><a href="about.html">О компании</a></li>
+                    <li><a href="licenses.html">Сертификаты</a></li>
+                    <li><a href="reviews.html">Отзывы</a></li>
+                    <li><a href="contacts.html" class="active">Контакты</a></li>
+                </ul>
+            </nav>
+            <button class="burger-menu" id="burger-menu">
+                <span class="burger-menu__line"></span>
+                <span class="burger-menu__line"></span>
+                <span class="burger-menu__line"></span>
+            </button>
+        </div>
+    </header>
 
     <main>
         <section id="contacts-page">
             <div class="container">
                 <h2 data-aos="fade-up">Свяжитесь с нами</h2>
-                <p style="text-align: center; max-width: 800px; margin: 0 auto 3rem auto;" data-aos="fade-up"
-                    data-aos-delay="100">
-                    Мы всегда готовы ответить на ваши вопросы.
+                <p style="text-align:center;max-width:680px;margin:.5rem auto 0;"
+                   data-aos="fade-up" data-aos-delay="100">
+                    Мы всегда готовы ответить на ваши вопросы и рассчитать стоимость проекта.
                 </p>
+
                 <div class="contact-grid">
+
+                    <!-- Контактная информация -->
                     <div class="contact-info" data-aos="fade-right">
                         <h3>Контактная информация</h3>
                         <ul>
-                            <li><strong>Телефон / WhatsApp:</strong> <a href="tel:+375295220261">+375 (29) 522-02-61</a>
+                            <li>
+                                <div class="ci-icon">📞</div>
+                                <div class="ci-text">
+                                    <strong>Телефон / WhatsApp</strong>
+                                    <a href="tel:+375295220261">+375 (29) 522-02-61</a>
+                                </div>
                             </li>
-                            <li><strong>Telegram:</strong> <a href="https://t.me/+375295220261" target="_blank">+375
-                                    (29) 522-02-61</a></li>
-                            <li><strong>E-mail:</strong> <a
-                                    href="mailto:constructiongroup86@mail.ru">constructiongroup86@mail.ru</a></li>
-                            <li><strong>Instagram:</strong> <a href="https://www.instagram.com/s_vami_stroy_grypp"
-                                    target="_blank">@s_vami_stroy_grypp</a></li>
-                            <li><strong>Почтовый адрес:</strong> 225331, РБ, Брестская обл., Барановичский р-н, д. Новая
-                                Мышь, ул. Барановичская, дом 28</li>
+                            <li>
+                                <div class="ci-icon">✈️</div>
+                                <div class="ci-text">
+                                    <strong>Telegram</strong>
+                                    <a href="https://t.me/+375295220261" target="_blank">+375 (29) 522-02-61</a>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="ci-icon">✉️</div>
+                                <div class="ci-text">
+                                    <strong>E-mail</strong>
+                                    <a href="mailto:constructiongroup86@mail.ru">constructiongroup86@mail.ru</a>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="ci-icon">📸</div>
+                                <div class="ci-text">
+                                    <strong>Instagram</strong>
+                                    <a href="https://www.instagram.com/s_vami_stroy_grypp" target="_blank">@s_vami_stroy_grypp</a>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="ci-icon">📍</div>
+                                <div class="ci-text">
+                                    <strong>Почтовый адрес</strong>
+                                    <span>225331, РБ, Брестская обл., Барановичский р-н,<br>д. Новая Мышь, ул. Барановичская, дом 28</span>
+                                </div>
+                            </li>
                         </ul>
                     </div>
-                    
-                    <div class="contact-form" data-aos="fade-left">
-                        <h3>Отправить сообщение</h3>
-                        <form action="https://formsubmit.co/constructiongroup86@mail.ru" method="POST">
-                            
-                            <input type="hidden" name="_captcha" value="false">
-                            <input type="hidden" name="_subject" value="Новая заявка с сайта С ВАМИ СТРОЙГРУПП">
 
-                            <div style="margin-bottom: 1rem;">
-                                <input type="text" name="name" placeholder="Ваше имя" required
-                                    style="width: 100%; padding: 0.5rem;">
+                    <!-- Форма -->
+                    <div class="contact-form-card" data-aos="fade-left">
+                        <h3>Отправить сообщение</h3>
+                        <form id="contact-form" novalidate>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="from_name">Ваше имя *</label>
+                                    <input type="text" id="from_name" name="from_name"
+                                           placeholder="Иван Иванов" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone">Телефон</label>
+                                    <input type="tel" id="phone" name="phone"
+                                           placeholder="+375 (29) ___-__-__">
+                                </div>
                             </div>
-                            <div style="margin-bottom: 1rem;">
-                                <input type="email" name="email" placeholder="Ваш Email" required
-                                    style="width: 100%; padding: 0.5rem;">
+                            <div class="form-group">
+                                <label for="from_email">Email *</label>
+                                <input type="email" id="from_email" name="from_email"
+                                       placeholder="example@mail.ru" required>
                             </div>
-                            <div style="margin-bottom: 1rem;">
-                                <textarea name="message" placeholder="Ваше сообщение" rows="5" required
-                                    style="width: 100%; padding: 0.5rem;"></textarea>
+                            <div class="form-group">
+                                <label for="message">Сообщение *</label>
+                                <textarea id="message" name="message"
+                                          placeholder="Опишите ваш проект или задайте вопрос..." required></textarea>
                             </div>
-                            <button type="submit" class="btn">Отправить</button>
+                            <button type="submit" class="btn-submit" id="submit-btn">
+                                <span class="btn-spinner" id="spinner"></span>
+                                <span id="btn-text">Отправить сообщение →</span>
+                            </button>
                         </form>
                     </div>
+
                 </div>
             </div>
         </section>
     </main>
 
-    <div id="footer-placeholder"></div>
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 ООО "С ВАМИ СТРОЙГРУПП". Все права защищены.</p>
+            <p><a href="contacts.html">Связаться с нами</a></p>
+        </div>
+    </footer>
 
+    <!-- Toast -->
+    <div id="toast" role="alert" aria-live="polite">
+        <span class="toast-icon" id="toast-icon"></span>
+        <div class="toast-body">
+            <span class="toast-title" id="toast-title"></span>
+            <span class="toast-sub"   id="toast-sub"></span>
+        </div>
+        <button class="toast-close" id="toast-close" aria-label="Закрыть">✕</button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/simplelightbox/2.14.2/simple-lightbox.min.js"></script>
     <script src="js/script.js"></script>
-</body>
 
+    <script>
+    (function () {
+        var PUBLIC_KEY  = '7oc4ZvzQKjNqQ0Xx9';
+        var SERVICE_ID  = 'service_jp20mtr';
+        var TEMPLATE_ID = 'template_5ejqknx';
+        emailjs.init({ publicKey: PUBLIC_KEY });
+
+        var form       = document.getElementById('contact-form');
+        var submitBtn  = document.getElementById('submit-btn');
+        var btnText    = document.getElementById('btn-text');
+        var spinner    = document.getElementById('spinner');
+        var toast      = document.getElementById('toast');
+        var toastIcon  = document.getElementById('toast-icon');
+        var toastTitle = document.getElementById('toast-title');
+        var toastSub   = document.getElementById('toast-sub');
+        var toastClose = document.getElementById('toast-close');
+        var hideTimer;
+
+        function showToast(type, icon, title, sub) {
+            clearTimeout(hideTimer);
+            toastIcon.textContent  = icon;
+            toastTitle.textContent = title;
+            toastSub.textContent   = sub;
+            toast.className        = 'show ' + type;
+            hideTimer = setTimeout(hideToast, 6500);
+        }
+
+        function hideToast() {
+            toast.className = toast.className.replace(/\bshow\b/, '').trim();
+        }
+
+        toastClose.addEventListener('click', hideToast);
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            var name    = document.getElementById('from_name').value.trim();
+            var email   = document.getElementById('from_email').value.trim();
+            var message = document.getElementById('message').value.trim();
+
+            if (!name || !email || !message) {
+                showToast('error', '⚠️', 'Заполните обязательные поля', 'Имя, Email и сообщение не могут быть пустыми.');
+                return;
+            }
+
+            submitBtn.disabled     = true;
+            spinner.style.display  = 'block';
+            btnText.textContent    = 'Отправляем...';
+
+            emailjs.send(SERVICE_ID, TEMPLATE_ID, {
+                from_name:  name,
+                from_email: email,
+                phone:      document.getElementById('phone').value.trim() || 'не указан',
+                message:    message,
+                title:      'Новая заявка с сайта',
+            })
+            .then(function () {
+                showToast('success', '🎉', 'Сообщение отправлено!', 'Мы получили вашу заявку и свяжемся с вами в ближайшее время.');
+                form.reset();
+            })
+            .catch(function (err) {
+                console.error(err);
+                showToast('error', '😔', 'Не удалось отправить', 'Позвоните нам напрямую: +375 (29) 522-02-61');
+            })
+            .finally(function () {
+                submitBtn.disabled    = false;
+                spinner.style.display = 'none';
+                btnText.textContent   = 'Отправить сообщение →';
+            });
+        });
+    })();
+    </script>
+
+</body>
 </html>

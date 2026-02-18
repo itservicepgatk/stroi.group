@@ -12,96 +12,370 @@
     <link rel="manifest" href="site.webmanifest">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplelightbox/2.14.2/simple-lightbox.min.css" integrity="sha512-FaAQujRxLMvw+BkmGN3w7u9EdQQr1t0vQoY8KDh09+6SFaWSTe+KrT8oCwg25X91hytm5c5BTmiSGQejkraaZg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        /* ─── Карточки сертификатов ─── */
+        .licenses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .license-item {
+            background: var(--white-color);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,.10);
+            transition: transform .3s ease, box-shadow .3s ease;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .license-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,.16);
+        }
+
+        .license-item__thumb {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-bottom: 3px solid var(--primary-color);
+            transition: transform .3s ease;
+            display: block;
+        }
+
+        .license-item:hover .license-item__thumb {
+            transform: scale(1.03);
+        }
+
+        .license-item__caption {
+            padding: 1rem;
+            text-align: center;
+            margin: 0;
+            font-size: .95rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: .25rem;
+        }
+
+        .license-item__zoom {
+            display: block;
+            margin: .5rem auto 0;
+            font-size: .78rem;
+            color: var(--primary-color);
+            font-weight: 600;
+            letter-spacing: .03em;
+        }
+
+        /* ─── Встроенный лайтбокс ─── */
+        #lb-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,.88);
+            z-index: 9000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        #lb-overlay.open { display: flex; }
+
+        #lb-img-wrap {
+            max-width: 90vw;
+            max-height: 82vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #lb-img {
+            max-width: 90vw;
+            max-height: 82vh;
+            border-radius: 6px;
+            box-shadow: 0 8px 40px rgba(0,0,0,.6);
+            object-fit: contain;
+            display: block;
+        }
+
+        #lb-close {
+            position: fixed;
+            top: 18px;
+            right: 24px;
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: #fff;
+            font-size: 1.6rem;
+            line-height: 46px;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            font-family: sans-serif;
+            z-index: 9100;
+            transition: background .2s;
+        }
+
+        #lb-close:hover { background: #a00018; }
+
+        #lb-caption {
+            color: #ddd;
+            margin-top: 14px;
+            font-size: .9rem;
+            text-align: center;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .lb-nav-btn {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(200,16,46,.8);
+            color: #fff;
+            font-size: 1.6rem;
+            line-height: 50px;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            z-index: 9100;
+            transition: background .2s;
+        }
+
+        .lb-nav-btn:hover { background: rgba(200,16,46,1); }
+        #lb-prev { left: 20px; }
+        #lb-next { right: 20px; }
+
+        #lb-counter {
+            position: fixed;
+            bottom: 18px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #ccc;
+            font-size: .85rem;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        @media (max-width: 768px) {
+            .lb-nav-btn { width: 38px; height: 38px; font-size: 1.2rem; line-height: 38px; }
+            #lb-prev { left: 8px; }
+            #lb-next { right: 8px; }
+        }
+    </style>
 </head>
 <body>
-    <header class="header">
-    <div class="container">
-        <a href="index.html" class="logo">
-            <img src="images/logo.png" alt="Логотип С ВАМИ СТРОЙГРУПП">
-            <div class="logo-text">
-                <span>С ВАМИ</span> СТРОЙГРУПП
-            </div>
-        </a>
-        <nav class="navbar">
-            <ul>
-                <li><a href="index.html">Главная</a></li>
-                <li><a href="services/index.html">Услуги</a></li>
-                <li><a href="projects.html">Портфолио</a></li>
-                <li><a href="about.html">О компании</a></li>
-                <li><a href="licenses.html">Сертификаты</a></li>
-                <li><a href="contacts.html">Контакты</a></li>
-            </ul>
-        </nav>
-        <button class="burger-menu" id="burger-menu">
-            <span class="burger-menu__line"></span>
-            <span class="burger-menu__line"></span>
-            <span class="burger-menu__line"></span>
-        </button>
-    </div>
-</header>
 
+    <header class="header">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="images/logo.png" alt="Логотип С ВАМИ СТРОЙГРУПП">
+                <div class="logo-text">
+                    <span>С ВАМИ</span> СТРОЙГРУПП
+                </div>
+            </a>
+            <nav class="navbar">
+                <ul>
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="services/index.html">Услуги</a></li>
+                    <li><a href="projects.html">Портфолио</a></li>
+                    <li><a href="about.html">О компании</a></li>
+                    <li><a href="licenses.html" class="active">Сертификаты</a></li>
+                    <li><a href="reviews.html">Отзывы</a></li>
+                    <li><a href="contacts.html">Контакты</a></li>
+                </ul>
+            </nav>
+            <button class="burger-menu" id="burger-menu">
+                <span class="burger-menu__line"></span>
+                <span class="burger-menu__line"></span>
+                <span class="burger-menu__line"></span>
+            </button>
+        </div>
+    </header>
 
     <main>
         <section id="licenses-page">
             <div class="container">
                 <h2 data-aos="fade-up">Сертификаты и Лицензии</h2>
-                <p style="text-align: center; max-width: 800px; margin: 0 auto 3rem auto;" data-aos="fade-up" data-aos-delay="100">
-                    Наша деятельность полностью лицензирована и сертифицирована. Это является гарантией соответствия наших услуг высоким стандартам качества и безопасности.
+                <p style="text-align:center; max-width:800px; margin:0 auto 3rem auto;"
+                   data-aos="fade-up" data-aos-delay="100">
+                    Наша деятельность полностью лицензирована и сертифицирована. Это является гарантией
+                    соответствия наших услуг высоким стандартам качества и безопасности.
                 </p>
-                <div class="licenses-grid gallery">
-                    <div class="license-item" data-aos="fade-up" data-aos-delay="200">
-                        <a href="docs/attestat-genpodryad.jpg">
-                           <img src="docs/attestat-genpodryad.jpg" alt="Аттестат соответствия на генподряд">
-                        </a>
-                        <p style="text-align:center;"><strong>Аттестат соответствия (Генподряд)</strong><br>№ 0008681-ГС до 12.01.2029</p>
+
+                <div class="licenses-grid">
+
+                    <div class="license-item" data-aos="fade-up" data-aos-delay="200"
+                         data-src="docs/attestat-genpodryad.jpg"
+                         data-caption="Аттестат соответствия (Генподряд) · №0008681-ГС · до 12.01.2029">
+                        <img class="license-item__thumb"
+                             src="docs/attestat-genpodryad.jpg"
+                             alt="Аттестат соответствия на генподряд">
+                        <p class="license-item__caption">
+                            <strong>Аттестат соответствия (Генподряд)</strong>
+                            №&nbsp;0008681-ГС &nbsp;·&nbsp; до 12.01.2029
+                            <span class="license-item__zoom">🔍 Нажмите для просмотра</span>
+                        </p>
                     </div>
-                    <div class="license-item" data-aos="fade-up" data-aos-delay="300">
-                        <a href="docs/attestat-stroitelstvo.jpg">
-                           <img src="docs/attestat-stroitelstvo.jpg" alt="Аттестат соответствия на строительство">
-                        </a>
-                         <p style="text-align:center;"><strong>Аттестат соответствия (Строительство)</strong><br>№ 0016641-СТ до 12.01.2029</p>
+
+                    <div class="license-item" data-aos="fade-up" data-aos-delay="300"
+                         data-src="docs/attestat-stroitelstvo.jpg"
+                         data-caption="Аттестат соответствия (Строительство) · №0016641-СТ · до 12.01.2029">
+                        <img class="license-item__thumb"
+                             src="docs/attestat-stroitelstvo.jpg"
+                             alt="Аттестат соответствия на строительство">
+                        <p class="license-item__caption">
+                            <strong>Аттестат соответствия (Строительство)</strong>
+                            №&nbsp;0016641-СТ &nbsp;·&nbsp; до 12.01.2029
+                            <span class="license-item__zoom">🔍 Нажмите для просмотра</span>
+                        </p>
                     </div>
-                    <div class="license-item" data-aos="fade-up" data-aos-delay="400">
-                        <a href="docs/sertifikat-iso-9001.jpg">
-                            <img src="docs/sertifikat-iso-9001.jpg" alt="Сертификат ISO 9001-2015">
-                        </a>
-                         <p style="text-align:center;"><strong>Сертификат ISO 9001-2015</strong><br>№ BY/112 05.01. 148.01 00090</p>
+
+                    <div class="license-item" data-aos="fade-up" data-aos-delay="400"
+                         data-src="docs/sertifikat-iso-9001.jpg"
+                         data-caption="Сертификат ISO 9001-2015 · №BY/112 05.01.148.01 00090">
+                        <img class="license-item__thumb"
+                             src="docs/sertifikat-iso-9001.jpg"
+                             alt="Сертификат ISO 9001-2015">
+                        <p class="license-item__caption">
+                            <strong>Сертификат ISO 9001-2015</strong>
+                            №&nbsp;BY/112 05.01.&nbsp;148.01&nbsp;00090
+                            <span class="license-item__zoom">🔍 Нажмите для просмотра</span>
+                        </p>
                     </div>
-                    <div class="license-item" data-aos="fade-up" data-aos-delay="200">
-                        <a href="docs/svidetelstvo-teh-kompetentnosti.jpg">
-                            <img src="docs/svidetelstvo-teh-kompetentnosti.jpg" alt="Свидетельство о технической компетентности">
-                        </a>
-                         <p style="text-align:center;"><strong>Свидетельство о тех. компетентности</strong><br>до 28.12.2028</p>
+
+                    <div class="license-item" data-aos="fade-up" data-aos-delay="200"
+                         data-src="docs/svidetelstvo-teh-kompetentnosti.jpg"
+                         data-caption="Свидетельство о технической компетентности · до 28.12.2028">
+                        <img class="license-item__thumb"
+                             src="docs/svidetelstvo-teh-kompetentnosti.jpg"
+                             alt="Свидетельство о технической компетентности">
+                        <p class="license-item__caption">
+                            <strong>Свидетельство о тех. компетентности</strong>
+                            до 28.12.2028
+                            <span class="license-item__zoom">🔍 Нажмите для просмотра</span>
+                        </p>
                     </div>
-                     <div class="license-item" data-aos="fade-up" data-aos-delay="300">
-                        <a href="docs/svidetelstvo-registracii.jpg">
-                            <img src="docs/svidetelstvo-registracii.jpg" alt="Свидетельство о гос. регистрации">
-                        </a>
-                         <p style="text-align:center;"><strong>Свидетельство о гос. регистрации</strong><br>№ 291733892</p>
+
+                    <div class="license-item" data-aos="fade-up" data-aos-delay="300"
+                         data-src="docs/svidetelstvo-registracii.jpg"
+                         data-caption="Свидетельство о государственной регистрации · №291733892">
+                        <img class="license-item__thumb"
+                             src="docs/svidetelstvo-registracii.jpg"
+                             alt="Свидетельство о гос. регистрации">
+                        <p class="license-item__caption">
+                            <strong>Свидетельство о гос. регистрации</strong>
+                            №&nbsp;291733892
+                            <span class="license-item__zoom">🔍 Нажмите для просмотра</span>
+                        </p>
                     </div>
-                     <div class="license-item" data-aos="fade-up" data-aos-delay="400">
-                        <a href="docs/sertifikat-okna-dveri.jpg">
-                            <img src="docs/sertifikat-okna-dveri.jpg" alt="Сертификат на заполнение проемов">
-                        </a>
-                         <p style="text-align:center;"><strong>Сертификат (Заполнение проемов)</strong><br>до 27.12.2028</p>
+
+                    <div class="license-item" data-aos="fade-up" data-aos-delay="400"
+                         data-src="docs/sertifikat-okna-dveri.jpg"
+                         data-caption="Сертификат на заполнение оконных и дверных проёмов · до 27.12.2028">
+                        <img class="license-item__thumb"
+                             src="docs/sertifikat-okna-dveri.jpg"
+                             alt="Сертификат на заполнение проемов">
+                        <p class="license-item__caption">
+                            <strong>Сертификат (Заполнение проёмов)</strong>
+                            до 27.12.2028
+                            <span class="license-item__zoom">🔍 Нажмите для просмотра</span>
+                        </p>
                     </div>
+
                 </div>
             </div>
         </section>
     </main>
 
     <footer class="footer">
-    <div class="container">
-        <p>&copy; 2025 ООО "С ВАМИ СТРОЙГРУПП". Все права защищены.</p>
-        <p><a href="contacts.html">Связаться с нами</a></p>
-    </div>
-</footer>
+        <div class="container">
+            <p>&copy; 2025 ООО "С ВАМИ СТРОЙГРУПП". Все права защищены.</p>
+            <p><a href="contacts.html">Связаться с нами</a></p>
+        </div>
+    </footer>
 
-    
+    <!-- ─── Встроенный лайтбокс ─── -->
+    <div id="lb-overlay" role="dialog" aria-modal="true" aria-label="Просмотр сертификата">
+        <button id="lb-close" aria-label="Закрыть">✕</button>
+        <button class="lb-nav-btn" id="lb-prev" aria-label="Предыдущий">&#8249;</button>
+        <div id="lb-img-wrap">
+            <img id="lb-img" src="" alt="Сертификат">
+        </div>
+        <button class="lb-nav-btn" id="lb-next" aria-label="Следующий">&#8250;</button>
+        <div id="lb-caption"></div>
+        <div id="lb-counter"></div>
+    </div>
+
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/simplelightbox/2.14.2/simple-lightbox.min.js" integrity="sha512/4kQE5RJQYHRhUiK+CZS8UhaJTnLmQkDUf810hiP2X8LdjthA/rm0VqqWJcyelIx+NDyNHFmtqvuIgOFQNl34WA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="js/script.js"></script>
+
+    <script>
+    (function () {
+        /* Собираем все карточки в массив */
+        var items = Array.from(document.querySelectorAll('.license-item[data-src]'));
+        var docs  = items.map(function (el) {
+            return {
+                src:     el.getAttribute('data-src'),
+                caption: el.getAttribute('data-caption'),
+            };
+        });
+
+        var overlay  = document.getElementById('lb-overlay');
+        var img      = document.getElementById('lb-img');
+        var caption  = document.getElementById('lb-caption');
+        var counter  = document.getElementById('lb-counter');
+        var btnPrev  = document.getElementById('lb-prev');
+        var btnNext  = document.getElementById('lb-next');
+        var btnClose = document.getElementById('lb-close');
+        var current  = 0;
+
+        function show(index) {
+            current = (index + docs.length) % docs.length;
+            img.src              = docs[current].src;
+            caption.textContent  = docs[current].caption;
+            counter.textContent  = (current + 1) + ' / ' + docs.length;
+            overlay.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function close() {
+            overlay.classList.remove('open');
+            img.src = '';
+            document.body.style.overflow = '';
+        }
+
+        /* Клик по карточке */
+        items.forEach(function (el, idx) {
+            el.addEventListener('click', function () { show(idx); });
+        });
+
+        /* Навигация */
+        btnPrev.addEventListener('click',  function () { show(current - 1); });
+        btnNext.addEventListener('click',  function () { show(current + 1); });
+        btnClose.addEventListener('click', close);
+
+        /* Закрытие по фону */
+        overlay.addEventListener('click', function (e) {
+            if (e.target === overlay) close();
+        });
+
+        /* Клавиатура */
+        document.addEventListener('keydown', function (e) {
+            if (!overlay.classList.contains('open')) return;
+            if (e.key === 'Escape')     close();
+            if (e.key === 'ArrowLeft')  show(current - 1);
+            if (e.key === 'ArrowRight') show(current + 1);
+        });
+    })();
+    </script>
+
 </body>
 </html>

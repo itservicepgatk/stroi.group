@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Отзывы | ООО "С ВАМИ СТРОЙГРУПП"</title>
+    <meta name="description" content="Отзывы клиентов о работе ООО 'С ВАМИ СТРОЙГРУПП'. Официальные письма-отзывы от заказчиков строительных работ.">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="manifest" href="site.webmanifest">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        /* ─── Карточки отзывов ─── */
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 2.5rem;
+            margin-top: 1rem;
+        }
+
+        .review-card {
+            background: var(--white-color);
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,.10);
+            overflow: hidden;
+            transition: transform .3s ease, box-shadow .3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .review-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 30px rgba(0,0,0,.16);
+        }
+
+        .review-card__header {
+            background: var(--dark-color);
+            color: var(--white-color);
+            padding: 1.5rem;
+        }
+
+        .review-card__header h3 {
+            color: var(--white-color);
+            margin: 0 0 .4rem 0;
+            font-size: 1rem;
+            line-height: 1.45;
+        }
+
+        .review-card__date {
+            font-size: .82rem;
+            color: #bbb;
+        }
+
+        .review-card__body {
+            padding: 1.4rem 1.5rem;
+            flex: 1;
+        }
+
+        .review-card__object {
+            font-size: .88rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            padding-left: .8rem;
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .review-card__text {
+            font-size: .97rem;
+            color: var(--text-color);
+            line-height: 1.8;
+            margin: 0;
+        }
+
+        .review-card__footer {
+            padding: 1rem 1.5rem 1.5rem;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .review-card__signatory {
+            font-size: .9rem;
+            color: #666;
+        }
+
+        .review-card__signatory strong {
+            color: var(--dark-color);
+            display: block;
+            margin-bottom: .1rem;
+        }
+
+        .reviews-doc-btn {
+            display: inline-block;
+            background: var(--primary-color);
+            color: var(--white-color);
+            padding: .55rem 1.2rem;
+            border-radius: 5px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: .85rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: background-color .3s ease;
+            white-space: nowrap;
+        }
+
+        .reviews-doc-btn:hover {
+            background: #a00018;
+        }
+
+        .reviews-intro {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 3rem auto;
+        }
+
+        /* ─── Встроенный лайтбокс ─── */
+        #lb-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,.88);
+            z-index: 9000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        #lb-overlay.open {
+            display: flex;
+        }
+
+        #lb-img-wrap {
+            position: relative;
+            max-width: 90vw;
+            max-height: 82vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #lb-img {
+            max-width: 90vw;
+            max-height: 82vh;
+            border-radius: 6px;
+            box-shadow: 0 8px 40px rgba(0,0,0,.6);
+            object-fit: contain;
+            display: block;
+        }
+
+        #lb-close {
+            position: fixed;
+            top: 18px;
+            right: 24px;
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: #fff;
+            font-size: 1.6rem;
+            line-height: 46px;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            font-family: sans-serif;
+            z-index: 9100;
+            transition: background .2s;
+        }
+
+        #lb-close:hover { background: #a00018; }
+
+        #lb-caption {
+            color: #ddd;
+            margin-top: 14px;
+            font-size: .9rem;
+            text-align: center;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .lb-nav-btn {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(200,16,46,.8);
+            color: #fff;
+            font-size: 1.6rem;
+            line-height: 50px;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            z-index: 9100;
+            transition: background .2s;
+        }
+
+        .lb-nav-btn:hover { background: rgba(200,16,46,1); }
+        #lb-prev { left: 20px; }
+        #lb-next { right: 20px; }
+
+        #lb-counter {
+            position: fixed;
+            bottom: 18px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #ccc;
+            font-size: .85rem;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        @media (max-width: 768px) {
+            .review-card__footer { flex-direction: column; align-items: flex-start; }
+            .lb-nav-btn { width: 38px; height: 38px; font-size: 1.2rem; line-height: 38px; }
+            #lb-prev { left: 8px; }
+            #lb-next { right: 8px; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="header">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="images/logo.png" alt="Логотип С ВАМИ СТРОЙГРУПП">
+                <div class="logo-text">
+                    <span>С ВАМИ</span> СТРОЙГРУПП
+                </div>
+            </a>
+            <nav class="navbar">
+                <ul>
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="services/index.html">Услуги</a></li>
+                    <li><a href="projects.html">Портфолио</a></li>
+                    <li><a href="about.html">О компании</a></li>
+                    <li><a href="licenses.html">Сертификаты</a></li>
+                    <li><a href="reviews.html" class="active">Отзывы</a></li>
+                    <li><a href="contacts.html">Контакты</a></li>
+                </ul>
+            </nav>
+            <button class="burger-menu" id="burger-menu">
+                <span class="burger-menu__line"></span>
+                <span class="burger-menu__line"></span>
+                <span class="burger-menu__line"></span>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <section id="reviews-page">
+            <div class="container">
+                <h2 data-aos="fade-up">Отзывы наших клиентов</h2>
+                <p class="reviews-intro" data-aos="fade-up" data-aos-delay="100">
+                    Мы дорожим доверием наших заказчиков. Ниже представлены официальные письма-отзывы от организаций,
+                    с которыми мы успешно сотрудничали.
+                </p>
+
+                <div class="reviews-grid">
+
+                    <!-- Отзыв 1 -->
+                    <div class="review-card" data-aos="fade-up" data-aos-delay="150">
+                        <div class="review-card__header">
+                            <h3>ОАО «Пинсксовхозстрой»<br>Передвижная механизированная колонна №13</h3>
+                            <span class="review-card__date">19 января 2026 г. &nbsp;·&nbsp; №4/2026</span>
+                        </div>
+                        <div class="review-card__body">
+                            <div class="review-card__object">
+                                Реконструкция здания Тальминовичской СШ под отделение круглосуточного пребывания
+                                граждан пожилого возраста и инвалидов (а.г. Тальминовичи, Ляховичский район)
+                            </div>
+                            <p class="review-card__text">
+                                В период с июня по август 2024 года ООО «С ВАМИ СТРОЙ ГРУПП» выполняло работы по
+                                строительству данного объекта. Все работы выполнены в соответствии с условиями
+                                заключённого договора, с соблюдением сроков выполнения. Качество выполняемых работ
+                                заслуживает положительной оценки. При выполнении строительных работ нарушений
+                                производственной и технологической дисциплины, а также требований по охране труда
+                                со стороны субподрядчика не было.
+                            </p>
+                        </div>
+                        <div class="review-card__footer">
+                            <div class="review-card__signatory">
+                                <strong>И.А. Пастернакевич</strong>
+                                Заместитель главного инженера
+                            </div>
+                            <button class="reviews-doc-btn"
+                                    data-src="docs/otzyv-pinsksovhozstroy-2026.jpg"
+                                    data-caption="ОАО «Пинсксовхозстрой» · №4/2026 · 19.01.2026"
+                                    data-index="0">
+                                📄 Смотреть документ
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Отзыв 2 -->
+                    <div class="review-card" data-aos="fade-up" data-aos-delay="300">
+                        <div class="review-card__header">
+                            <h3>ГУ «Ляховичский территориальный центр социального обслуживания населения»</h3>
+                            <span class="review-card__date">19 января 2026 г. &nbsp;·&nbsp; №01-39/</span>
+                        </div>
+                        <div class="review-card__body">
+                            <div class="review-card__object">
+                                Текущий ремонт крыши здания
+                            </div>
+                            <p class="review-card__text">
+                                С 06.08.2025 по 08.09.2025 ООО «С ВАМИ СТРОЙГРУПП» выполняло работы по текущему
+                                ремонту крыши здания. Все работы выполнены в соответствии с заявкой и условиями
+                                заключённого договора, соблюдены сроки выполнения. Качество выполненных работ
+                                заслуживает высокой оценки: подрядчик проявил профессионализм, использовал
+                                качественные материалы и обеспечил надёжный результат. Выражаем благодарность
+                                за сотрудничество.
+                            </p>
+                        </div>
+                        <div class="review-card__footer">
+                            <div class="review-card__signatory">
+                                <strong>Т.Н. Ревинская</strong>
+                                Директор
+                            </div>
+                            <button class="reviews-doc-btn"
+                                    data-src="docs/otzyv-lyakhovichi-tcson-2026.jpg"
+                                    data-caption="ГУ «Ляховичский ТЦСОН» · №01-39/ · 19.01.2026"
+                                    data-index="1">
+                                📄 Смотреть документ
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 ООО "С ВАМИ СТРОЙГРУПП". Все права защищены.</p>
+            <p><a href="contacts.html">Связаться с нами</a></p>
+        </div>
+    </footer>
+
+    <!-- ─── Встроенный лайтбокс (без внешних зависимостей) ─── -->
+    <div id="lb-overlay" role="dialog" aria-modal="true" aria-label="Просмотр документа">
+        <button id="lb-close" aria-label="Закрыть">✕</button>
+        <button class="lb-nav-btn" id="lb-prev" aria-label="Предыдущий">&#8249;</button>
+        <div id="lb-img-wrap">
+            <img id="lb-img" src="" alt="Документ-отзыв">
+        </div>
+        <button class="lb-nav-btn" id="lb-next" aria-label="Следующий">&#8250;</button>
+        <div id="lb-caption"></div>
+        <div id="lb-counter"></div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script src="js/script.js"></script>
+
+    <script>
+    (function () {
+        /* Список всех документов для лайтбокса */
+        var docs = [];
+        document.querySelectorAll('.reviews-doc-btn').forEach(function (btn) {
+            docs.push({
+                src:     btn.getAttribute('data-src'),
+                caption: btn.getAttribute('data-caption'),
+            });
+        });
+
+        var overlay  = document.getElementById('lb-overlay');
+        var img      = document.getElementById('lb-img');
+        var caption  = document.getElementById('lb-caption');
+        var counter  = document.getElementById('lb-counter');
+        var btnPrev  = document.getElementById('lb-prev');
+        var btnNext  = document.getElementById('lb-next');
+        var btnClose = document.getElementById('lb-close');
+        var current  = 0;
+
+        function show(index) {
+            current = (index + docs.length) % docs.length;
+            img.src         = docs[current].src;
+            caption.textContent = docs[current].caption;
+            counter.textContent = (current + 1) + ' / ' + docs.length;
+            /* Показываем/скрываем стрелки */
+            btnPrev.style.display = docs.length > 1 ? '' : 'none';
+            btnNext.style.display = docs.length > 1 ? '' : 'none';
+            overlay.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function close() {
+            overlay.classList.remove('open');
+            img.src = '';
+            document.body.style.overflow = '';
+        }
+
+        /* Открытие по кнопке */
+        document.querySelectorAll('.reviews-doc-btn').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                show(parseInt(btn.getAttribute('data-index'), 10));
+            });
+        });
+
+        /* Навигация */
+        btnPrev.addEventListener('click',  function () { show(current - 1); });
+        btnNext.addEventListener('click',  function () { show(current + 1); });
+        btnClose.addEventListener('click', close);
+
+        /* Закрытие по клику на фон */
+        overlay.addEventListener('click', function (e) {
+            if (e.target === overlay) close();
+        });
+
+        /* Закрытие по Escape, стрелки клавиатуры */
+        document.addEventListener('keydown', function (e) {
+            if (!overlay.classList.contains('open')) return;
+            if (e.key === 'Escape')      close();
+            if (e.key === 'ArrowLeft')   show(current - 1);
+            if (e.key === 'ArrowRight')  show(current + 1);
+        });
+    })();
+    </script>
+</body>
+</html>
